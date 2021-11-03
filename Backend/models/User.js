@@ -32,6 +32,14 @@ class User {
 
         return db.execute(sql);
     }
+
+    static findByEmail(email) {
+        let sql= `
+            SELECT * FROM user WHERE email = '${email}';
+        `;
+
+        return db.execute(sql);
+    }
 }
 
 module.exports = User;
