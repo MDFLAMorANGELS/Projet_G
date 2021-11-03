@@ -15,9 +15,14 @@
 </template>
 
 <script>
+import {getUser} from './request.js'
 export default {
   name: 'Form_login',
 }
+getUser('test, test')
+.then(user => {
+
+})
 </script>
 
 <style scoped>
