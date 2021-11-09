@@ -14,7 +14,7 @@ exports.getAllPost = async (req, res, next) => {
 exports.createNewPost = async (req, res , next) => {
     try {
         let { title, data} = req.body;
-    let post = new Post(title, data);
+    let post = new Post(title, data, req.userID);
 
     post = await post.save();
 

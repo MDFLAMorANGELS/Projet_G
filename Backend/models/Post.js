@@ -1,9 +1,11 @@
 const db = require('../config/db');
 
 class Post {
-    constructor(title, data) {
+    constructor(title, data, userID) {
         this.title = title;
         this.data = data;
+        this.authorID = userID;
+
     }
 
     save() {
@@ -18,11 +20,13 @@ class Post {
         INSERT INTO post(
            title,
            data,
+           author_ID,
            created_at 
         )
         VALUES(
             '${this.title}',
             '${this.data}',
+            '${this.authorID}',
            ' ${createdAtDate}'
         )
         `;
