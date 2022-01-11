@@ -16,7 +16,7 @@ app.use(express.json());
 
 app.use("/user", require("./routes/userRoutes"));
 app.use("/post", require("./routes/postRoutes"));
-//app.use("/comment", require("./routes/commentRoutes"));
+app.use("/comment", require("./routes/commentRoutes"));
 
 
 module.exports = app;

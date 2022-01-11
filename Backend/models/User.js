@@ -44,7 +44,7 @@ class User {
     static findById(id) {
         let sql = `SELECT * FROM user WHERE ID = '${id}';
         `;
-        console.log(sql);
+        //console.log(sql);
         return db.execute(sql);
     }
 }

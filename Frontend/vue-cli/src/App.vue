@@ -4,7 +4,7 @@
       <img src='./assets/logo1.png' alt= 'Logo de Groupomania' />
     </div>
   </div>
-  <router-view/>
+<router-view/>
 </template>
 
 <style>

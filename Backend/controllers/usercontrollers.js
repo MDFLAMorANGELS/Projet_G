@@ -76,7 +76,7 @@ exports.login = (req, res, next) => {
 exports.getUserInfo = async (req, res, next) => {
     try {
         let  info = await User.findById( req.userID );
-        console.log(info[0][0])
+        //console.log(info[0][0])
         res.status(200).json({user : info});
     } catch (error) {
         console.log(error);

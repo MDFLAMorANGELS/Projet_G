@@ -1,11 +1,27 @@
 <template>
 <div id="main">
     <div id="head">
-        <p>Bonjour <span>{{userInfos.username}}</span></p>
+        <div class="head-hello">
+            <p ><i v-if=" userInfos.isAdmin  != 1 " class="fas fa-user-shield"></i></p> 
+            <p class="head-hello-name">Bonjour <span>{{userInfos.username}}</span></p>
+        </div>
         <button id="deconnexion" @click="logout()"> Déconnexion </button>
     </div>
     <div>
         <Form_post/>
+    </div>
+    <div id="test2">
+        <div id="boxPost" v-for="post in post" :key="post">
+            <div> 
+                <p>{{ post.username }} a Publié le {{ post.created_at }}</p>
+            </div>
+            <div id="test">
+                <p id="titlePost">Titre : {{ post.title }} </p>
+                <p id="dataPost"> Post : {{ post.data }} </p>
+            </div>
+            <Form_comment/>
+            <button @click="commentID(post.ID)" class="button_comment" >Publié</button>
+        </div>
     </div>
 </div>
 </template>
@@ -15,11 +31,18 @@
 import { mapState } from 'vuex';
 
 import Form_post from '../components/Form_post.vue';
+import Form_comment from '../components/Form_comment.vue';
+
 
 export default {
     name: 'Accueil',
+    data: function() {
+    return {
+    }
+    },
     components: {
         Form_post,
+        Form_comment,
     },
     mounted: function() {
         console.log(this.$store.state);
@@ -27,16 +50,26 @@ export default {
             this.$router.push('/');
             return ;
         }
-        this.$store.dispatch('getUserInfos');
+        this.$store.dispatch('getUserInfos'),
+        this.$store.dispatch('getAllPost');
     },
     computed: {
-        ...mapState(['user','userInfos'])
+        ...mapState(['user','userInfos']),
+        ...mapState(['post'])
     },
     methods: {
         logout: function() {
             this.$store.commit('logout');
-            this.$router.push('/') }
+            this.$router.push('/') 
+        },
+        commentID: function(ID) {
+            console.log(ID);
+            this.$store.dispatch('createComment', {
+              ID:ID,
+          })
+        },
     },
+    
 }
 </script>
 
@@ -46,6 +79,9 @@ p {
 }
 p span {
     font-weight: bold;
+}
+.head-hello{
+    display: flex;
 }
 #deconnexion {
     background: linear-gradient(#8d0b66, #3f87a6);
@@ -64,7 +100,46 @@ p span {
 }
 main {
     margin: 2%;
-
+}
+#boxPost {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid rgb(88, 88, 88);
+    flex-wrap: nowrap;
+    text-align: center;
+    background-color: gray;
+    width: 80%;
+    margin: 1%;
+    border-radius: 20px;
+    box-shadow: 2px 2px 2px #999;
+}
+#titlePost {
+    background-color: rgb(88, 109, 179);
+    border-radius: 20px;
+}
+#dataPost {
+    background-color: rgb(216, 96, 96);
+    border-radius: 20px;
+}
+#test {
+    width: 80%;
+}
+#test2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.button_comment {
+  background: linear-gradient(#8d0b66, #3f87a6);
+  color: white;
+  padding: 8px 25px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  border-radius: 30px;
+  font-size: 1.2em;
 }
 </style>
-

@@ -36,8 +36,12 @@ const store = createStore({
       password: '',
     },
     post: {
-      titre: '',
+      title: '',
       data: '',
+    },
+    comment: {
+      comment: 'dd',
+      ID: ''
     },
   },
   mutations: {
@@ -58,6 +62,21 @@ const store = createStore({
         token : '', 
       }
       localStorage.removeItem('user');
+    },
+    poste: function(state, post) {
+      state.post = post;
+    },
+    addPost: function(state, post){
+      state.post.unshift(post)
+      console.log(state.post);
+    },
+    commente: function(state, comment) {
+      state.comment = comment;
+    },
+    addComment: function(state, comment, ID){
+      state.comment.unshift(comment)
+      state.ID = ID;
+      console.log(state.comment);
     },
   },
   actions: {
@@ -106,15 +125,67 @@ const store = createStore({
         throw error
       });
     },
-    /*createPost: ({ commit }) => {
+    createPost({ commit }, post) {
       let token = JSON.parse(localStorage.getItem('user')).token;
       let config = {
         headers:{
           "Authorization":"Barear "+ token
         }
       }
-      axios.post('http://localhost:3000/post/', config)
-    },*/
+      console.log(post);
+      return new Promise((resolve, reject) => {
+        axios.post('http://localhost:3000/post/', post,  config  )
+          .then((response) => {
+            console.log("createPost", response.data);
+            commit("addPost", response.data.newPost);
+            console.log(response.data);
+            resolve(response);
+          })
+          .catch((error) => {
+            console.log(error);
+            reject(error);
+          });
+      });
+    },
+    getAllPost: ({ commit }) => {
+      let token = JSON.parse(localStorage.getItem('user')).token;
+      let config = {
+        headers:{
+          "Authorization":"Barear "+ token
+        }
+      }
+      axios.get('http://localhost:3000/post/', config)
+      .then(function (response) {
+        commit('poste', response.data);
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        throw error
+      });
+    },
+    createComment({ commit }, comment,) {
+      let token = JSON.parse(localStorage.getItem('user')).token;
+      let config = {
+        headers:{
+          "Authorization":"Barear "+ token
+        }
+      }
+      const commentData = this.state.comment;
+      const createComment = `api/comment/${comment.ID}`
+      return new Promise((resolve, reject) => {
+        axios.post(createComment, commentData,  config  )
+          .then((response) => {
+            console.log("createComment", response.data);
+            commit("addComment", response.data.newComment);
+            console.log(response.data);
+            resolve(response);
+          })
+          .catch((error) => {
+            console.log(error);
+            reject(error);
+          });
+      });
+    },
   },
 })
 

@@ -5,7 +5,7 @@ const auth = require('../middleware/auth');
 
 // route GET & POST  - /post/
 router.route("/")
-.get(postControllers.getAllPost)
+.get(auth, postControllers.getAllPost)
 .post(auth, postControllers.createNewPost);
 
 router.route("/:id")
