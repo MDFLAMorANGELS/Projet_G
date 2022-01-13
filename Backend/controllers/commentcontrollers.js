@@ -14,8 +14,7 @@ exports.getAllComment = async (req, res, next) => {
 exports.createNewComment = async (req, res , next) => {
     try {
         let {comment} = req.body;
-    let newComment = new Comment(comment, req.userID, parseInt(req.params.postID));
-
+    let newComment = new Comment(req.body.data, req.userID,req.body.ID);
     await newComment.save();
 
     res.status(201).json({message: 'Comment created'});

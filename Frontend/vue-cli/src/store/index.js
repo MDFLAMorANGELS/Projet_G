@@ -40,7 +40,7 @@ const store = createStore({
       data: '',
     },
     comment: {
-      comment: 'dd',
+      comment: '',
       ID: ''
     },
   },
@@ -73,10 +73,8 @@ const store = createStore({
     commente: function(state, comment) {
       state.comment = comment;
     },
-    addComment: function(state, comment, ID){
-      state.comment.unshift(comment)
+    addComment: function(state, ID){
       state.ID = ID;
-      console.log(state.comment);
     },
   },
   actions: {
@@ -170,12 +168,12 @@ const store = createStore({
           "Authorization":"Barear "+ token
         }
       }
-      const commentData = this.state.comment;
-      const createComment = `api/comment/${comment.ID}`
+      const commentData = comment;
+      console.log(commentData);
+      const createComment = `http://localhost:3000/comment/${comment.ID}`
       return new Promise((resolve, reject) => {
         axios.post(createComment, commentData,  config  )
           .then((response) => {
-            console.log("createComment", response.data);
             commit("addComment", response.data.newComment);
             console.log(response.data);
             resolve(response);

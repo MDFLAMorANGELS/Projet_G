@@ -11,16 +11,16 @@
         <Form_post/>
     </div>
     <div id="test2">
-        <div id="boxPost" v-for="post in post" :key="post">
+        <div id="boxPost" v-for="publication in post" :key="publication">
             <div> 
-                <p>{{ post.username }} a Publié le {{ post.created_at }}</p>
+                <p>{{ publication.username }} a Publié le {{ publication.created_at }}</p>
             </div>
             <div id="test">
-                <p id="titlePost">Titre : {{ post.title }} </p>
-                <p id="dataPost"> Post : {{ post.data }} </p>
+                <p id="titlePost">Titre : {{ publication.title }} </p>
+                <p id="dataPost"> Post : {{ publication.data }} </p>
             </div>
-            <Form_comment/>
-            <button @click="commentID(post.ID)" class="button_comment" >Publié</button>
+            <Form_comment :postID='publication.ID'/>
+            
         </div>
     </div>
 </div>
@@ -61,12 +61,6 @@ export default {
         logout: function() {
             this.$store.commit('logout');
             this.$router.push('/') 
-        },
-        commentID: function(ID) {
-            console.log(ID);
-            this.$store.dispatch('createComment', {
-              ID:ID,
-          })
         },
     },
     

@@ -1,14 +1,16 @@
 <template>
   <div>
-    <label for="comment"><b>Commentaire</b></label>
+    <form @submit.prevent="validateForm()" action="">
+    <label for="comment"><b>Commentaire {{ postID }}</b></label>
     <input
       v-model="comment"
-      @keyup="comments()"
       maxlength="250"
       type="text"
       placeholder="Ecrivez un commentaire"
       name="comment"
     />
+<input type="submit" value="Publier">
+  </form>
   </div>
 </template>
 
@@ -24,13 +26,17 @@ export default {
     }
   },
   methods: {
-      comments: function() {
-          console.log(this.comment);
+      validateForm: function() {
+        console.log(this.comment,this.postID)
+          this.$store.dispatch('createComment', {
+              ID: this.postID,
+              data: this.comment,
+          })
       }
     },
-  computed: {
-
-    },
+  props: [
+    'postID'
+  ],
 };
 </script>
 
