@@ -20,7 +20,7 @@
                 <p id="dataPost"> Post : {{ publication.data }} </p>
             </div>
             <Form_comment :postID='publication.ID'/>
-            
+            <p>{{ comment }}</p>
         </div>
     </div>
 </div>
@@ -52,10 +52,14 @@ export default {
         }
         this.$store.dispatch('getUserInfos'),
         this.$store.dispatch('getAllPost');
+        this.$store.dispatch('getAllComment');
+
     },
     computed: {
         ...mapState(['user','userInfos']),
-        ...mapState(['post'])
+        ...mapState(['post']),
+        ...mapState(['comment'])
+
     },
     methods: {
         logout: function() {

@@ -184,6 +184,22 @@ const store = createStore({
           });
       });
     },
+    getAllComment: ({ commit }) => {
+      let token = JSON.parse(localStorage.getItem('user')).token;
+      let config = {
+        headers:{
+          "Authorization":"Barear "+ token
+        }
+      }
+      axios.get('http://localhost:3000/comment/', config)
+      .then(function (response) {
+        commit('commente', response.data);
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        throw error
+      });
+    },
   },
 })
 
