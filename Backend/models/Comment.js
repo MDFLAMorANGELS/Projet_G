@@ -1,8 +1,10 @@
 const db = require('../config/db');
 
 class Comment {
-    constructor(comment) {
+    constructor(comment, userID, postId) {
         this.comment = comment;
+        this.userID = userID;
+        this.postId = postId;
     }
 
     save() {
@@ -16,19 +18,43 @@ class Comment {
         let sql = `
         INSERT INTO comment(
            comment,
+           author_ID,
+           post_ID,
            created_at 
         )
         VALUES(
             '${this.comment}',
+            '${this.userID}',
+            '${this.postId}',
            ' ${createdAtDate}'
         )
         `;
+        /*
+         db.execute(sql, (err, results, fields) => {
+             if (err) {
+                 throw error
+             }
+             console.log(results)
+             return results
+         });
+         */
+        return db.execute(sql)
+        
+    }
+
+    static findAll() {
+        let sql = "SELECT comment.post_ID,comment.ID,comment.comment,comment.created_at, comment.author_ID, user.username from comment INNER JOIN user ON comment.author_ID = user.ID;";
 
         return db.execute(sql);
     }
 
-    static findAll() {
-        let sql = "SELECT * FROM comment;";
+    static findById(id) {
+        let sql = `SELECT comment.post_ID,comment.ID,comment.comment,comment.created_at, comment.author_ID, user.username from comment INNER JOIN user ON comment.author_ID = user.ID where comment.ID = ${id};`;
+        return db.execute(sql);
+    }
+    
+    static deleteComment(id) {
+        let sql = `Delete from comment where ID = ${id};`;
 
         return db.execute(sql);
     }

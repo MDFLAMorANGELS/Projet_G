@@ -18,6 +18,17 @@ exports.signup =  (req, res , next) => {
         if(!schema.validate(req.body.password)){
             return res.status(400).json({message: 'Mot de passe faible'})
         }
+        /* regex ici
+        const regexMail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        const regexPassword = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,64})/;
+        const regexUsername = 
+        /^(?:((([^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]'’,\-.\s])){1,}(['’,\-\.]){0,1}){2,}(([^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]'’,\-. ]))*(([ ]+){0,1}(((([^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]'’,\-\.\s])){1,})(['’\-,\.]){0,1}){2,}((([^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]'’,\-\.\s])){2,})?)*)$/;
+        if (
+            regexMail.test(email) &&
+            regexPassword.test(password) &&
+            regexUsername.test(username) &&
+        ) {}
+        */
         bcrypt.hash(req.body.password, 10)
         .then(hash => {
             const user = new User (
@@ -40,7 +51,6 @@ exports.login = (req, res, next) => {
     User.findByEmail(req.body.email)
     .then(data => {
         const user = data[0][0];
-        
         if (!user) {
             return res.status(401).json({ error: 'Utilisateur non trouvé'});
         }
@@ -62,3 +72,15 @@ exports.login = (req, res, next) => {
     })
     .catch(error => res.status(500).json({ error }));
 };
+
+exports.getUserInfo = async (req, res, next) => {
+    try {
+        let  info = await User.findById( req.userID );
+        //console.log(info[0][0])
+        res.status(200).json({user : info});
+    } catch (error) {
+        console.log(error);
+        next(error);
+        
+    }
+}
