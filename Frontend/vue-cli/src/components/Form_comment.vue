@@ -1,8 +1,9 @@
 <template>
   <div>
-    <form @submit.prevent="validateForm()" action="">
+    <form @submit.prevent="validateForm(),resetInput()" action="">
     <label for="comment"><b>Commentaire {{ postID }}</b></label>
     <input
+      ref="comment"
       v-model="comment"
       maxlength="250"
       type="text"
@@ -32,7 +33,10 @@ export default {
               ID: this.postID,
               data: this.comment,
           })
-      }
+      },
+      resetInput() {
+            this.$refs["comment"].value = "";
+        },
     },
   props: [
     'postID'

@@ -1,4 +1,5 @@
 <template>
+<form @submit.prevent="login(),createAccount()" action="">
   <div id="container">         
       <div id="form">
         <h1 v-if="mode == 'login'">Connexion</h1>
@@ -11,29 +12,23 @@
         </p>
         <div v-if="mode == 'create'">
             <label  for="username"><b>Nom d'utilisateur</b></label>
-            <input v-model="username" type="text"  placeholder="Nom d'utilisateur" name="username" required>
+            <input ref="username" v-model="username" type="text"  placeholder="Nom d'utilisateur" name="username" required>
         </div>
         <label for="email"><b>email</b></label>
-        <input v-model="email" type="email"  placeholder="Adresse mail" name="email" required>
+        <input ref="email" v-model="email" type="email"  placeholder="Adresse mail" name="email" required>
         <label for="password"><b>Mot de passe</b></label>
-        <input v-model="password" type="password" placeholder="Mot de passe" name="password" required>
-
+        <input ref="password" v-model="password" type="password" placeholder="Mot de passe" name="password" required>
         <div v-if="mode == 'login' && status == 'error_login'" >
             Adresse mail et/ou mot de passe invalide
         </div>
         <div v-if="mode == 'create' && status == 'error_create'" >
             Adresse mail et/ou username deja utilisé
         </div>
-        <button @click="login()" v-if="mode == 'login'"  id='submit'>
-            <span v-if="status == 'loading'">Connexion en cours ...</span>
-            <span v-else>Connexion</span>
-        </button>
-        <button @click="createAccount()" v-else id='submit' >
-            <span v-if="status == 'loading'">Création en cours ...</span>
-            <span v-else>Créer mon compte</span>
-        </button>
+        <input type="submit" value="Connexion" v-if="mode == 'login'">
+        <input type="submit" value="Créer mon compte" v-else >
       </div>
   </div>
+  </form>
 </template>
 
 <script>
@@ -83,9 +78,13 @@ export default {
               console.log(error);
           })
       },
+      resetInput() {
+            this.$refs["username"].value = "";
+            this.$refs["email"].value = "";
+            this.$refs["password"].value = "";
+        },
   }
 }
-
 </script>
 
 <style scoped>
@@ -117,7 +116,7 @@ p span{
 }
 
 /* Full-width inputs */
-input[type=text], input[type=password], input[type=email] {
+input[type=text], input[type=password], input[type=email], input[type=submit] {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -128,7 +127,7 @@ input[type=text], input[type=password], input[type=email] {
 }
 
 /* Set a style for all buttons */
-button {
+input[type=submit] {
     background: linear-gradient(#8d0b66, #3f87a6);
     color: white;
     padding: 14px 20px;
@@ -140,7 +139,7 @@ button {
     font-size: 1.2em;
 }
 
-button:hover {
+input[type=submit]:hover {
     background-color: white;
     color: #5ce963;
 }

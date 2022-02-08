@@ -2,7 +2,7 @@
 <div id="main">
     <div id="head">
         <div class="head-hello">
-            <p ><i v-if=" userInfos.isAdmin  != 1 " class="fas fa-user-shield"></i></p> 
+            <p ><i v-if=" userInfos.isAdmin  != 1 " class="fas fa-user-shield"></i></p>
             <p class="head-hello-name">Bonjour <span>{{userInfos.username}}</span></p>
         </div>
         <button id="deconnexion" @click="logout()"> Déconnexion </button>
@@ -14,13 +14,19 @@
         <div id="boxPost" v-for="publication in post" :key="publication">
             <div> 
                 <p>{{ publication.username }} a Publié le {{ publication.created_at }}</p>
+                <button @click="deletePost(publication)" v-if="userInfos.ID == publication.author_ID ||  userInfos.isAdmin  != 1 ">Suprimer</button>
             </div>
             <div id="test">
                 <p id="titlePost">Titre : {{ publication.title }} </p>
                 <p id="dataPost"> Post : {{ publication.data }} </p>
             </div>
             <Form_comment :postID='publication.ID'/>
-            <p>{{ comment }}</p>
+                <div  v-for="comment in publication.comments" :key="comment.ID">
+                    <p>{{comment.username}} A commenté : 
+                    {{ comment.comment }}
+                    A : {{ comment.created_at }}</p>
+                    <button @click="deleteComment(comment)" v-if="userInfos.ID == comment.author_ID ||  userInfos.isAdmin  != 1 ">Suprimer</button>
+                </div>
         </div>
     </div>
 </div>
@@ -52,20 +58,24 @@ export default {
         }
         this.$store.dispatch('getUserInfos'),
         this.$store.dispatch('getAllPost');
-        this.$store.dispatch('getAllComment');
-
     },
     computed: {
         ...mapState(['user','userInfos']),
         ...mapState(['post']),
-        ...mapState(['comment'])
-
     },
     methods: {
         logout: function() {
             this.$store.commit('logout');
             this.$router.push('/') 
         },
+        deletePost: function(post) {
+            console.log(post)
+            this.$store.dispatch('deletePost', post)
+        },
+        deleteComment: function(comment) {
+            console.log(comment)
+            this.$store.dispatch('deleteComment', comment)
+        }
     },
     
 }

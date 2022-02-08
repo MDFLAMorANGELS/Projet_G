@@ -1,36 +1,69 @@
 <template>
+<form @submit.prevent="validateForm()" action="">
 <div class="container_post"> 
     <div id="textarea">
         <label for="story">Raconter nous votre story :</label>
-        <textarea  v-model="title" id="story" name="publication" rows="1" cols="80" placeholder="Ecrivez un titre" maxlength="150" required></textarea>
-        <textarea  v-model="data" id="story" name="publication" rows="7" cols="80" placeholder="Ecrivez ici votre publication" maxlength="1000" required></textarea>
+        <textarea ref="title"  v-model="title" id="story" name="publication" rows="1" cols="80" placeholder="Ecrivez un titre" maxlength="150" required></textarea>
+        <textarea ref="data" v-model="data" id="story" name="publication" rows="7" cols="80" placeholder="Ecrivez ici votre publication" maxlength="1000" required></textarea>
         <label for="avatar">Choisissez une image :</label>
 
-<input type="file"
-       id="file" name="file"
-       accept="image/png, image/jpeg, image/gif">
+<form enctype="multipart/form-data" @submit.prevent="sendFile">
+    <div class="field">
+        <label for="file" class="file">Upload file :</label>
+        <input 
+        type="file"
+        @change="fileChange"
+        ref="file"
+        >
+        <p>previsualise image</p>
+        <img :src="image" alt="">
+        <span class="file-name">{{ file.name }}</span>
+        <input type="submit" value="upload file">
     </div>
-    <button @click="button()" id="button_post"> Publié </button>
+    <div class="previsualise">
+    </div>
+</form>
+    </div>
+    <input type="submit"  id="button_post" value="Publier">
 </div>
+</form>
 </template>
 
 <script>
+
 export default {
     name:'Form_post',
     data: function() {
     return {
         title: '',
         data: '',
+        file: '',
+        image:'https://www.gorilla-cannabis-seeds.co.uk/images/product_image_not_found.gif',
     }
     },
     methods: {
-        button :function() {
+        validateForm :function() {
             console.log(this.titre,this.text);
             this.$store.dispatch('createPost', {
               title: this.title,
               data: this.data,
+              file: this.file
+          })
+        this.$refs["title"].value = "";
+        this.$refs["data"].value = "";
+        },
+        selectFile :function() {
+            this.file = this.$refs.file.files[0]
+        },
+        sendFile :function() {
+            this.$store.dispatch('uploadFile', {
+              file: this.file,
           })
         },
+        fileChange :function(e) {
+            const file = e.target.files[0]
+            this.image = URL.createObjectURL(file)
+        }
     },
 }
 </script>

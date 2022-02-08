@@ -29,12 +29,32 @@ class Comment {
            ' ${createdAtDate}'
         )
         `;
+        /*
+         db.execute(sql, (err, results, fields) => {
+             if (err) {
+                 throw error
+             }
+             console.log(results)
+             return results
+         });
+         */
+        return db.execute(sql)
+        
+    }
+
+    static findAll() {
+        let sql = "SELECT comment.post_ID,comment.ID,comment.comment,comment.created_at, comment.author_ID, user.username from comment INNER JOIN user ON comment.author_ID = user.ID;";
 
         return db.execute(sql);
     }
 
-    static findAll() {
-        let sql = "SELECT comment.comment,comment.created_at, comment.author_ID, user.username from comment INNER JOIN user ON comment.author_ID = user.ID;";
+    static findById(id) {
+        let sql = `SELECT comment.post_ID,comment.ID,comment.comment,comment.created_at, comment.author_ID, user.username from comment INNER JOIN user ON comment.author_ID = user.ID where comment.ID = ${id};`;
+        return db.execute(sql);
+    }
+    
+    static deleteComment(id) {
+        let sql = `Delete from comment where ID = ${id};`;
 
         return db.execute(sql);
     }

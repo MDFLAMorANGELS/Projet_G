@@ -39,10 +39,6 @@ const store = createStore({
       title: '',
       data: '',
     },
-    comment: {
-      comment: '',
-      ID: ''
-    },
   },
   mutations: {
     setStatus: function(state, status) {
@@ -70,11 +66,29 @@ const store = createStore({
       state.post.unshift(post)
       console.log(state.post);
     },
+    deletePoste: function(state,postID){
+      let post = state.post.filter(p => p.ID  != postID);
+      state.post = post
+    },
     commente: function(state, comment) {
       state.comment = comment;
     },
-    addComment: function(state, ID){
-      state.ID = ID;
+    addComment: function(state,comment){
+      console.log(state)
+      let postIndex = state.post.findIndex(post => post.ID === comment.post_ID)
+      console.log(postIndex)
+      state.post[postIndex].comments.unshift(comment)
+      
+      
+    },
+    deleteCommente: function(state,comment){
+      let postIndex = state.post.findIndex(post => post.ID === comment.post_ID)
+      console.log(postIndex)
+      let commentIndex = state.post.comments.findIndex(post => post.comments.ID === comment.post_ID)
+      console.log(commentIndex)
+      //state.post[postIndex].comments[commentIndex].filter(c => c.ID != comment.ID)
+      //state.post = post
+      
     },
   },
   actions: {
@@ -161,7 +175,17 @@ const store = createStore({
         throw error
       });
     },
-    createComment({ commit }, comment,) {
+    deletePost({ commit }, post) {
+      let token = JSON.parse(localStorage.getItem('user')).token;
+      let config = {
+        headers:{
+          "Authorization":"Barear "+ token
+        }
+      }
+    axios.delete(`http://localhost:3000/post/${post.ID}`, config)
+    commit('deletePoste', post.ID);
+    },
+    createComment({ commit }, comment) {
       let token = JSON.parse(localStorage.getItem('user')).token;
       let config = {
         headers:{
@@ -174,8 +198,8 @@ const store = createStore({
       return new Promise((resolve, reject) => {
         axios.post(createComment, commentData,  config  )
           .then((response) => {
-            commit("addComment", response.data.newComment);
-            console.log(response.data);
+            console.log(response);
+            commit("addComment", response.data.comment[0][0]);
             resolve(response);
           })
           .catch((error) => {
@@ -184,21 +208,32 @@ const store = createStore({
           });
       });
     },
-    getAllComment: ({ commit }) => {
+    deleteComment({ commit }, comment) {
       let token = JSON.parse(localStorage.getItem('user')).token;
       let config = {
         headers:{
           "Authorization":"Barear "+ token
         }
       }
-      axios.get('http://localhost:3000/comment/', config)
-      .then(function (response) {
-        commit('commente', response.data);
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        throw error
-      });
+    axios.delete(`http://localhost:3000/comment/${comment.ID}`, config)
+    .then((response) => {
+      console.log(response);
+      commit('deleteCommente', comment);
+    })
+    },
+    uploadFile({ commit }, file) {
+      let token = JSON.parse(localStorage.getItem('user')).token;
+      let config = {
+        headers:{
+          "Authorization":"Barear "+ token
+        }
+      }
+      console.log(file)
+      const formData = new FormData();
+      formData.append('file', this.file);
+      console.log(formData)
+    axios.post(`http://localhost:3000/upload/`,formData , config)
+    commit('', );
     },
   },
 })

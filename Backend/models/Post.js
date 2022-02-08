@@ -44,6 +44,12 @@ class Post {
 
         return db.execute(sql);
     }
+
+    static deletePost(id) {
+        let sql = `delete from post where ID = ${id};`;
+
+        return db.execute(sql);
+    }
 }
 
 module.exports = Post;
