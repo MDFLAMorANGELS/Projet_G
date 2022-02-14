@@ -43,7 +43,7 @@ class Comment {
     }
 
     static findAll() {
-        let sql = "SELECT comment.post_ID,comment.ID,comment.comment,comment.created_at, comment.author_ID, user.username from comment INNER JOIN user ON comment.author_ID = user.ID;";
+        let sql = "SELECT comment.post_ID,comment.ID,comment.comment,comment.created_at, comment.author_ID, user.username from comment INNER JOIN user ON comment.author_ID = user.ID ORDER BY id DESC;";
 
         return db.execute(sql);
     }

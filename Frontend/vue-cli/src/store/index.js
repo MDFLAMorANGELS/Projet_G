@@ -26,6 +26,7 @@ if (!user) {
   }
 }
 
+
 const store = createStore({
   state: {
     status: '',
@@ -82,13 +83,13 @@ const store = createStore({
       
     },
     deleteCommente: function(state,comment){
-      let postIndex = state.post.findIndex(post => post.ID === comment.post_ID)
+      let posts = [...state.post]
+      let postIndex = posts.findIndex(post => post.ID === comment.post_ID)
       console.log(postIndex)
-      let commentIndex = state.post.comments.findIndex(post => post.comments.ID === comment.post_ID)
+      let commentIndex = posts[postIndex].comments.findIndex(com => com.ID === comment.ID)
       console.log(commentIndex)
-      //state.post[postIndex].comments[commentIndex].filter(c => c.ID != comment.ID)
-      //state.post = post
-      
+      posts[postIndex].comments.splice(commentIndex,1);
+      state.post = [...posts]
     },
   },
   actions: {

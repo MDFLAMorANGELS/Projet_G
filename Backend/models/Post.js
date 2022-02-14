@@ -1,11 +1,11 @@
 const db = require('../config/db');
 
 class Post {
-    constructor(title, data, userID) {
+    constructor(title, data, userID, image) {
         this.title = title;
         this.data = data;
         this.authorID = userID;
-
+        this.image = image;
     }
 
     save() {
@@ -21,13 +21,15 @@ class Post {
            title,
            data,
            author_ID,
-           created_at 
+           created_at,
+           image
         )
         VALUES(
             '${this.title}',
             '${this.data}',
             '${this.authorID}',
            ' ${createdAtDate}'
+           ' ${this.image}'
         )
         `;
 

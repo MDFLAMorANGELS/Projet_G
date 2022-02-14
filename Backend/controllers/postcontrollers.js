@@ -24,7 +24,7 @@ exports.createNewPost = async (req, res , next) => {
     try {
         let { title, data} = req.body;
     let post = new Post(title, data, req.userID);
-
+    
     const createdPost = await post.save();
     post.ID = createdPost[0].insertId
     const newPost = await Post.findById(post.ID)
