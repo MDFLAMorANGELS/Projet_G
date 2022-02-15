@@ -14,6 +14,7 @@
         <div id="boxPost" v-for="publication in post" :key="publication">
             <div> 
                 <p>{{ publication.username }} a Publié le {{ publication.created_at }}</p>
+                <img v-if="publication.image !== null " img :src=publication.image alt="image de la publication">
                 <button @click="deletePost(publication)" v-if="userInfos.ID == publication.author_ID ||  userInfos.isAdmin  != 1 ">Suprimer</button>
             </div>
             <div id="test">

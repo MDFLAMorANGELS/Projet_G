@@ -23,12 +23,13 @@ class Post {
            author_ID,
            created_at,
            image
+           
         )
         VALUES(
             '${this.title}',
             '${this.data}',
             '${this.authorID}',
-           ' ${createdAtDate}'
+           ' ${createdAtDate}',
            ' ${this.image}'
         )
         `;
@@ -37,7 +38,7 @@ class Post {
     }
 
     static findAll() {
-        let sql = "select post.title,post.created_at, post.data, post.ID, post.author_ID, user.username from post INNER JOIN user ON post.author_ID = user.ID ORDER BY id DESC ;";
+        let sql = "select post.title,post.created_at, post.data, post.ID, post.author_ID, post.image, user.username from post INNER JOIN user ON post.author_ID = user.ID ORDER BY id DESC ;";
         return db.execute(sql);
     }
 

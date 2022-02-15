@@ -79,8 +79,6 @@ const store = createStore({
       let postIndex = state.post.findIndex(post => post.ID === comment.post_ID)
       console.log(postIndex)
       state.post[postIndex].comments.unshift(comment)
-      
-      
     },
     deleteCommente: function(state,comment){
       let posts = [...state.post]
@@ -142,12 +140,12 @@ const store = createStore({
       let token = JSON.parse(localStorage.getItem('user')).token;
       let config = {
         headers:{
-          "Authorization":"Barear "+ token
+          "Authorization":"Barear "+ token,
         }
       }
       console.log(post);
       return new Promise((resolve, reject) => {
-        axios.post('http://localhost:3000/post/', post,  config  )
+        axios.post('http://localhost:3000/post/', post,  config )
           .then((response) => {
             console.log("createPost", response.data);
             commit("addPost", response.data.newPost);
