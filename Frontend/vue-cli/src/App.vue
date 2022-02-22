@@ -1,8 +1,6 @@
 <template>
   <div id="nav">
-    <div id="logo">
-      <img src='./assets/logo1.png' alt= 'Logo de Groupomania' />
-    </div>
+      <img id="logo" src='./assets/logo1.png' alt= 'Logo de Groupomania' />
   </div>
 <router-view/>
 </template>
@@ -33,7 +31,7 @@ body {
   justify-content: flex-start;
 }
 
-img {
+#logo {
 	width: 150px;
 	height: 150px;
 }
